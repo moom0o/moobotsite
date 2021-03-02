@@ -1,2 +1,2 @@
 # moobotsite
-site for moobot
+serverless site for moobot
