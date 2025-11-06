@@ -118,10 +118,84 @@ Note: commands have a 5 second cooldown per user
 <iframe src="https://discordapp.com/widget?id=655884950494511132&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
 <h2>Other</h2>
 Made using mineflayer.
+
+<h2>Features</h2>
+
+<h3>Discord chat bridge</h3>
+
+The bot has full support in discord for cross chatting and running commands!
+<br>
+<img width="524" height="821" alt="image" src="i1.png" />
+
+<h3>Advanced player database system</h3>
+
+The bot uses sqlite3 to store all kinds of player statistics and messages.
+<br>
+<img width="674" height="569" alt="image" src="i2.png" />
+
+<h3>Message Queuing</h3>
+
+The bot will queue up messages so all messages can go through and the bot won't get kicked for spam.
+
+<h3>Discord Message Grouping</h3>
+
+The bot automatically groups up messages (up to 10 embeds per message) to avoid getting rate limited by discord with lots of chat messages
+<br>
+<img width="940" height="526" alt="image" src="i3.gif" />
+
+<h3>Anti anti spam</h3>
+
+The bot will automatically retry messages that fail to send after a few seconds.
+<br>
+<img width="964" height="186" alt="image" src="i4.png" />
+
+<h3>Death messages</h3>
+
+The bot will automatically save kill and death messages without requiring a regex statement. This works by checking for
+usernames in the message. Use OppositeDeathMessages if the killer comes first
+
+<h3>Advanced regex system</h3>
+
+The bot includes an advanced configurable regex system for custom chat regexes if the default doesn't suit your needs.
+
+<h3>Server pinger</h3>
+
+The bot will automatically ping the server every 3 secs before joining to make sure it's online, has more than 0 players
+online in case the main server is down, and avoids constant logins.
+<br>
+<img width="412" height="345" alt="image" src="i5.png" />
+
+<h3>Full message logging</h3>
+
+Never miss a message with a full logging system. The bot will automatically log messages and join/leave msgs and
+automatically compress log files to save space.
+<br>
+<img width="1039" height="709" alt="image" src="i6.png" />
+
+<h3>Automatic TPA</h3>
+
+The bot will automatically accept TPA requests.
+
+<h3>Nickname detection</h3>
+
+When enabled the bot will automatically run /realname USERNAME for any nicknamed players.
+
+<h3>UUID Caching</h3>
+
+UUIDs are cached to a database and recached after 35 days to avoid hammering the Mojang API (Minecraft usernames are
+locked for 37 days before they can be taken)
+
+<h3>Advanced offline messaging system</h3>
+
+All players have their own mailbox and other players are able to send them messages while they are offline so they can
+recieve it once they go back online. The author will also receive an offline message back letting them know the message was received.
+    
+    
 <br> For suggestions dm m.o.o.m.o.o on discord
 </body>
 <h2>Contribute</h2>
 Currently moobot is not open source however the website is: <a href="https://github.com/moom0o/moobotsite">https://github.com/moom0o/moobotsite</a>
+
 
 
 
