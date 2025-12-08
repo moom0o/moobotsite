@@ -1,2 +1,201 @@
 # moobotsite
 serverless site for moobot
+
+# moobot
+
+A utility bot for anarchy minecraft servers with 5000 lines of code. Saving player data for more than 1 million
+minecraft players.
+
+<img width="1448" height="861" alt="image" src="https://github.com/user-attachments/assets/c68ba6cb-a5f7-493b-8ad4-470ba1879ad8" />
+
+## Future possibilities
+* Public API
+
+## Features
+
+### Discord chat bridge
+
+The bot has full support in discord for cross chatting and running commands!
+
+<img width="524" height="821" alt="image" src="https://github.com/user-attachments/assets/c670510e-f472-419b-95e6-113ac35935b0" />
+
+### Advanced player database system
+
+The bot uses sqlite3 to store all kinds of player statistics and messages.
+
+<img width="674" height="569" alt="image" src="https://github.com/user-attachments/assets/9d103fb0-e76e-4f9d-a5cf-f8e259813030" />
+
+### Message Queuing
+
+The bot will queue up messages so all messages can go through and the bot won't get kicked for spam.
+
+### Discord Message Grouping
+
+The bot automatically groups up messages (up to 10 embeds per message) to avoid getting rate limited by discord with lots of chat messages
+
+<img width="940" height="526" alt="image" src="https://i.moomoo.me/d395kX.gif?key=VcmS8gFNG1" />
+
+### Anti anti spam
+
+The bot will automatically retry messages that fail to send after a few seconds.
+
+<img width="964" height="186" alt="image" src="https://github.com/user-attachments/assets/d83df77c-39c2-4650-80cd-52a3c3a8403f" />
+
+### Death messages
+
+The bot will automatically save kill and death messages without requiring a regex statement. This works by checking for
+usernames in the message. Use OppositeDeathMessages if the killer comes first
+
+### Advanced regex system
+
+The bot includes an advanced configurable regex system for custom chat regexes if the default doesn't suit your needs.
+
+### Server pinger
+
+The bot will automatically ping the server every 3 secs before joining to make sure it's online, has more than 0 players
+online in case the main server is down, and avoids constant logins.
+
+<img width="412" height="345" alt="image" src="https://github.com/user-attachments/assets/630d9ce0-9572-4c5f-9da4-ef4514a24cc9" />
+
+### Full message logging
+
+Never miss a message with a full logging system. The bot will automatically log messages and join/leave msgs and
+automatically compress log files to save space.
+
+<img width="1039" height="709" alt="image" src="https://github.com/user-attachments/assets/203e7907-1250-4b7a-ba35-8ce7171a0127" />
+
+### Automatic TPA
+
+The bot will automatically accept TPA requests.
+
+### Nickname detection
+
+When enabled the bot will automatically run /realname USERNAME for any nicknamed players.
+
+### UUID Caching
+
+UUIDs are cached to a database and recached after 35 days to avoid hammering the Mojang API (Minecraft usernames are
+locked for 37 days before they can be taken)
+
+### Advanced offline messaging system
+
+All players have their own mailbox and other players are able to send them messages while they are offline so they can
+recieve it once they go back online.
+
+## Commands
+<p>
+<h1>MooBot commands (Main commands) </h1>
+<h3>Note: commands have a 5 second cooldown per user</h3>
+<h3>!help - Get a help menu</h3>
+<h1>Database Player Statistics</h1>
+<h3> <new style="color:red">NEW</new> !joins or !quits</h3> Check how many times someone has joined or left (extracted from logs going back to 2021)
+
+<h3> <new style="color:red">NEW</new> !clout / !wordcount / !wc / !word PHRASE</h3> Find out how many times a word/message has been said on the server!!!
+<h3> <new style="color:red">NEW</new> !firstdeath / !fd PLAYER</h3> See your first death message (Death messages have been extracted from logs and now go back to 2021!!)
+<h3> <new style="color:red">NEW</new> !firstkill / !fk PLAYER</h3> See your first kill message (Death messages have been extracted from logs and now go back to 2021!!)
+<h3> <new style="color:red">NEW</new> !lastdeath / !ld PLAYER</h3> See your last death message (Death messages have been extracted from logs and now go back to 2021!!)
+<h3> <new style="color:red">NEW</new> !lastkill / !lk PLAYER</h3> See your last kill message (Death messages have been extracted from logs and now go back to 2021!!)
+<h3> <new style="color:red">NEW</new> !randomdeath / !rd PLAYER</h3> See a random death message (Death messages have been extracted from logs and now go back to 2021!!)
+<h3> <new style="color:red">NEW</new> !randomkill / !rk PLAYER</h3> See a random kill message (Death messages have been extracted from logs and now go back to 2021!!)
+<br>
+<h3> <new style="color:red">NEW</new> !data PLAYER</h3> Download all of you or someone elses data and messages!
+<h3> <new style="color:red">UPDATED</new> !top [NUMBER] [playtime/pt/deaths/kills/nolife/messages/joins/leaves] [hard/soft]</h3> Added nolife - now possible to change number
+<h3> <new style="color:red">UPDATED</new> !onlinetop / !ot / !otop [NUMBER] [nword(s)/playtime/pt/deaths/kills/nolife/messages] [hard/soft]</h3> Added nolife - Players with the highest stats that are currently online
+<h3> <new style="color:red">UPDATED</new> !quote [PLAYER] [PHRASE]</h3> Get a random message someone has said! Now a phrase can be added!
+<h3> <new style="color:red">NEW</new> !newplayers 30d ago</h3> Shows amount of new players that joined before a certain time/date. 
+<h3> <new style="color:red">NEW</new> !nolife</h3> Find out how much of your life was wasted playing the server, starting from firstjoin. It uses playtime divided by total time since first join. Also tells you the average time per day wasted. Command also useful for seeing moobots lifetime uptime.
+
+<h3> !firstwords</h3> First message the bot has saved from player
+<h3> !lastwords</h3> Last message the bot has saved from player
+<h3> !seen / !lastseen</h3> Last time the bot has seen someone online. Also tells you how long someone has been online if they are logged in. (inaccurate if bot has disconnected while they were online)
+<h3> !firstseen / !jd / !joindate</h3> First time the bot has seen someone online. - NOTE: Any firstseen times after July 10th, 2021, and before December 21st, 2021 have not been saved, and will show the most recent seen time.
+<h3> !playtime or !pt</h3> Get you or someone elses playtime.
+<h3> !kd or !kills or !deaths</h3> Works on nearly all servers, it checks for usernames in messages
+<h3> !messages</h3> Get total messages the bot has saved from a player. (Counting all messages is not supported due to lag)
+<h3> !savemsg</h3> Save a message to be played back later with !playmsg
+<h3> !playmsg</h3> Play a message you saved from !savemsg
+<h3> !iam</h3> Tell the bot who you are
+<h3> !whois</h3> See who people are
+<h3> !uuid</h3> Find a minecraft player's uuid (if server is cracked, will only show name)
+
+<h1>Online Player Statistics</h1>
+<h3> <new style="color:red">NEW</new> !players - ONLY WORKS ON DISCORD</h3> Total number of players and a list of current players online. In game, it shows the total amount of players that the bot has saved data for.
+<h3> <new style="color:red">NEW</new> !bestjitter or !bestj [MINUTES]</h3> Get players with lowest jitter.
+<h3> <new style="color:red">NEW</new> !worstjitter or !wj [MINUTES]</h3> Get players with highest jitter.
+<h3> !ping</h3> Get ping of yourself or someone else. Now shows jitter!
+<h3> !bestping or !bp</h3> Get player with lowest ping.
+<h3> !worstping or !wp</h3> Get player with highest ping.
+
+<h1>Offline Messaging System</h1>
+<h3> <new style="color:red">UPDATED!</new> !offlinemsg / !om / !offlinemessage / !omsg</h3> Save a message for someone and moobot will send them the message once they are online. NOW SUPPORTS UP TO 6 MESSAGES/2 PER AUTHOR!
+<h3> !ignore</h3> prevent someone from !offlinemsging you.
+<h3> !unignore</h3> allow someone to !offlinemsg you.
+
+<h1>InGame Bot Commands</h1>
+<h3> <new style="color:red">NEW</new> !mount</h3> Mount any boat or minecart within 5 blocks of the bot. Warning: Anyone can find the coords of the bot, don't bring it to your base!!!
+<h3> <new style="color:red">NEW</new> !dismount / !unmount</h3> Dismount from the boat or minecart.
+<h3> <new style="color:red">UPDATED!</new> !time</h3> Time in ticks, and NOW tells you how long until you can sleep.
+<h3> <new style="color:red">UPDATED!</new> !sleep</h3> Tells you if you can sleep or not and NOW tells you how long until you can sleep.
+
+<h3> !radius</h3> Get all players and coordinates in radius of bot.
+<h3> !coords</h3> Coords of the bot
+<h3> !kill / !killbot</h3> Kill the bot.
+<h3> !tps</h3> Check tps of server - NOT ACCURATE (THIS IS APPROXIMATE. IT PROBABLY ISN'T THE RIGHT NUMBER.)
+<h3> !discord</h3> Get discord invite for chat bridge
+<h3> !health</h3> Health and food level of bot
+<h3> !runtime / !uptime</h3> Uptime of bot
+
+<h1>Web API Commands</h1>
+<h3> <new style="color:red">NEW</new> !pirate QUERY</h3> Search the pirate bay!
+<h3> <new style="color:red">NEW</new> !tor QUERY</h3> Search the dark web! (Uses the ahmia search engine) What could possibly go wrong...
+<h3> <new style="color:red">UPDATED!</new> !chatgpt / !gpt / !ai</h3> Now supports message history! Use !gpt reset to reset - Ask chatgpt a prompt and respond with the bot
+<h3> <new style="color:red">UPDATED!</new> !deepseek / !china / !xi</h3> Now supports message history! Use !deepseek reset to reset - Ask deepseek (chinese gpt) a prompt and respond with the bot
+<h3> <new style="color:red">NEW</new> !stock [SYMBOL] [OPTIONAL DATE&ORTIME]</h3> Get current or historical price of stock with flexible date and time option.
+<h3> <new style="color:red">NEW</new> !dadjoke / !joke</h3> Get a shitty dad joke.
+<h3> !wolframalpha/!wa/!math [QUERY]</h3> Get query from <a href="https://www.wolframalpha.com">WolframAlpha</a>
+<h3> !linkpreview/!link/!www [URL]</h3> Get title of any website
+<h3> !down</h3> Check if a website is down
+<h3> !urban or !ud</h3> Get top urban dictionary definition
+<h3> !queue</h3> 2b2t queue Want to check 2b2t queue stats? <a href="https://queue.moomoo.me/">https://queue.moomoo.me/</a>
+<!-- <h3> !reddit or !reddit (reddit name) (EXAMPLE: "!reddit 2b2t" or "!reddit r/2b2t")</h3> GET latest post from a subreddit (<works style="color:red">Most likely broken, 403 from reddit api.</works>) -->
+<!-- <h3> !verse or !bible</h3> Get a random bible verse or add a verse at the end of the command! -->
+<h3> !online EXAMPLE "!online 2b2t.org"</h3> Check how many players are online on a minecraft server.
+
+<h1>Fun commands</h1>
+<h3> <new style="color:red">NEW</new> !hitman / !eliminate / !target</h3> Deploy a hitman to someone's location
+<h3> <new style="color:red">NEW</new> !blackjack</h3> Play a game of blackjack! Use !blackjack hit/stand
+<h3> <new style="color:red">NEW</new> !roulette</h3> Spin a roulette wheel!
+<h3> <new style="color:red">NEW</new> !nuke LOCATION</h3> Send a nuke to your specified location!
+<!-- <h3> <new style="color:red">NEW</new> !gas / !biden / !brandon</h3> Get current gas price in a specific town/state. UNITED STATES ONLY! <a href="/bonus.mp4">bonus video</a> -->
+<h3> !curse</h3> Curse a player!
+<h3> !ban</h3> Ban a player!
+<h3> !kick</h3> Kick a player!
+<h3> !mute</h3> Mute a player!
+<h3> !report</h3> Report someone to server moderators for breaking the rules.
+<h3> !rules</h3> Rules of the server
+<h3> !no</h3> NO
+<h3> !yes</h3> YES
+<h3> !dupe</h3> dupe an item!
+<h3> !locate</h3> get someones coords! 100% working 2020
+<h3> !ip</h3> find location and isp of an ip or domain.
+<h3> !dox</h3> find someones "ip"
+<h3> !y/n</h3> Yes or no
+<h3> !dice</h3> Roll a die
+<h3> !leak</h3> Leak coords
+<h3> !gm / !gamemode</h3> Change your gamemode
+<h3> !infect</h3> infect someone.
+<h3> !askgod / !askallah / !askrusher</h3> ask
+<h3> !give</h3> give someone something
+<h3> !teleport</h3> teleport!
+<h3> !back</h3> go back
+<h3> !suicide</h3> kill yourself
+<h3> !op</h3> Op yourself or someone else
+<h3> !tpa</h3> Request teleport to someone
+<h3> !tphere / !tpahere</h3> Request someone to teleport to you
+<h3> !tpaccept</h3> Accept a teleport request
+<h3> !tpdeny</h3> Deny a teleport request
+<h3> !sethome</h3> Set your home
+<h3> !home</h3> go to your home
+<h3> !execute</h3> start a vote to execute someone, use /kill yes or /kill no to vote.
+<h3> !bless</h3> bless someone. You are a good person.
+<h3> !kit</h3> recieve a kit!
