@@ -1,6 +1,3 @@
-# moobotsite
-serverless site for moobot
-
 # moobot
 
 A utility bot for anarchy minecraft servers with 5000 lines of code. Saving player data for more than 1 million
@@ -8,8 +5,14 @@ minecraft players.
 
 <img width="1448" height="861" alt="image" src="https://github.com/user-attachments/assets/c68ba6cb-a5f7-493b-8ad4-470ba1879ad8" />
 
-## Future possibilities
-* Public API
+- [Key Features](#Features)
+- [User Commands](#commands)
+- [Engineering Challenges](#engineering-challenges)
+- [Migration History](#migration-history)
+- [Discord Admin Commands](#discord-admin-commands)
+- [Terminal Commands](#terminal-commands)
+- [Scripts](#scripts)
+- [Configuration](#config-options)
 
 ## Features
 
@@ -82,12 +85,42 @@ locked for 37 days before they can be taken)
 All players have their own mailbox and other players are able to send them messages while they are offline so they can
 recieve it once they go back online.
 
+
+## Engineering Challenges
+### 2025 - Anti-anti spam
+My messages were constantly getting blocked for being too similar so I added some code to check if a message was sent by the server after 2 seconds, and if it wasn't, the message is automatically resent with extra characters at the end.
+### 2025 - UUID Caching
+I wanted to avoid hammering the Mojang API, so I added a UUID caching system. Usernames are locked for 37 days following a name change, so I set my limit to 35 days. UUIDs are stale after 35 days and will automatically be regrabbed upon request. This resulted in much fewer api requests as I was essentially the API.
+### 2025 - Discord Queuer/Grouper
+Same concept of the message queuer but for discord. I added the bot to a server with nearly 30K players all chatting at the same time and there was around 10 messages every second. The discord rate limit is 4/s with 10 embeds per group. So I created the grouper and queuer which brought my limit from 4 msgs/s up to 40 msgs/s
+### 2024 - Message Queuer
+Originally the bot was just sending out messages whenever players sent commands, but sometimes multiple players want to run commands at once, so this feature automatically queues up messages so the bot is never limited by the antispam.
+### 2024 - Server Pinger
+I wanted to avoid hammering the Mojang Auth API which logged in my account everytime I tried to connect to a server. Instead of logging in, I just added a pinger which detects exactly when a server comes online and if theres more than 0 players, so I can instantly join.
+## Migration History
+All migration scripts have been archived and can be found in /migrationscripts
+### 2025 - 2b2t.vc
+I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored.
+### 2025 - Removing spam
+FTS-5 is essentially a copy of the messages table and takes up a ton of space. I realized there's a lot of useless spam on these servers and added a command to delete all rows containing certain phrases like discord links. This cut the database size in half.
+### 2025 - FTS-5
+I wanted to add a !clout command which shows how many times a phrase has been said in chat, normally this SQL query takes 10+ seconds to run as it has to go through millions of messages, but I added FTS-5 support which makes it incredibly efficient to search through text.
+### 2025 - Parsing Logs
+I had some missing data that was never saved which I was able to grab from the logs I kept going back to 2021. I was able to add new commands (like !joins to show how many times a player joined) and backfill the data from the logs. I also saved all death messages going back to 2021 so I could add commands like !lastdeath. I was also able to fill in missing data caused by a bug years ago that didn't save join dates for a few months.
+### 2025 - Message Migration
+For my messages table I was using an array of messages converted into a string for each player which wasn't ideal. I converted everything into per row and later added FTS-5 support to make searches instantaneous.
+### 2021 - Massive JSON to SQLite Migration
+Originally, the bot was using JSON files saved for each individual player. This is a terrible way of storing data with files randomly corrupting, and I ended up reaching the Linux file limit. Once that happened I immediately got to work and started migrating everything to an SQLite database which is much more efficient and allows for commands that would never be possible with a bunch of JSON files.
+### 2019 - JSON Reformatting
+Back when I first created the bot, one of the very first migrations I had to do was converting the format of the files.
+
 ## Commands
 <p>
 <h1>MooBot commands (Main commands) </h1>
 <h3>Note: commands have a 5 second cooldown per user</h3>
 <h3>!help - Get a help menu</h3>
 <h1>Database Player Statistics</h1>
+<h3> <new style="color:red">NEW</new> !bedrock</h3> Find out how many bedrock players have joined.
 <h3> <new style="color:red">NEW</new> !joins or !quits</h3> Check how many times someone has joined or left (extracted from logs going back to 2021)
 
 <h3> <new style="color:red">NEW</new> !clout / !wordcount / !wc / !word PHRASE</h3> Find out how many times a word/message has been said on the server!!!
@@ -100,7 +133,7 @@ recieve it once they go back online.
 <br>
 <h3> <new style="color:red">NEW</new> !data PLAYER</h3> Download all of you or someone elses data and messages!
 <h3> <new style="color:red">UPDATED</new> !top [NUMBER] [playtime/pt/deaths/kills/nolife/messages/joins/leaves] [hard/soft]</h3> Added nolife - now possible to change number
-<h3> <new style="color:red">UPDATED</new> !onlinetop / !ot / !otop [NUMBER] [nword(s)/playtime/pt/deaths/kills/nolife/messages] [hard/soft]</h3> Added nolife - Players with the highest stats that are currently online
+<h3> <new style="color:red">UPDATED</new> !onlinetop / !ot / !otop [NUMBER] [playtime/pt/deaths/kills/nolife/messages] [hard/soft]</h3> Added nolife - Players with the highest stats that are currently online
 <h3> <new style="color:red">UPDATED</new> !quote [PLAYER] [PHRASE]</h3> Get a random message someone has said! Now a phrase can be added!
 <h3> <new style="color:red">NEW</new> !newplayers 30d ago</h3> Shows amount of new players that joined before a certain time/date. 
 <h3> <new style="color:red">NEW</new> !nolife</h3> Find out how much of your life was wasted playing the server, starting from firstjoin. It uses playtime divided by total time since first join. Also tells you the average time per day wasted. Command also useful for seeing moobots lifetime uptime.
@@ -199,3 +232,179 @@ recieve it once they go back online.
 <h3> !execute</h3> start a vote to execute someone, use /kill yes or /kill no to vote.
 <h3> !bless</h3> bless someone. You are a good person.
 <h3> !kit</h3> recieve a kit!
+
+
+## Discord Admin Commands
+### !ignorephrase
+Permanently ignore a phrase in chat, saved to blockedphrases.json
+### !ignoredeath
+Permanently ignore a players death messages in chat, saved to blockeddeaths.json
+### !restart
+Run process.exit and restart bot
+
+## Terminal commands
+### /hide
+Hide death messages and join/leave messages
+### /ignorephrase
+Permanently ignore a phrase in chat, saved to blockedphrases.json
+### /ignoredeath
+Permanently ignore a players death messages in chat, saved to blockeddeaths.json
+### /qmsg
+Add a message to the queue, so you aren't hitting antispam limits.
+### /toggleconnectionmsgs
+Enable client side connection messages if server doesn't have them.
+### /delete
+Delete all messages associated with certain phrases. For example deleting discord advertisements can save tons of storage.
+
+
+## Scripts
+### backup.sh
+Run a backup of all moobot instances, it vacuums into a new file and the rsyncs it to another server.
+### backupcold.sh
+Run a cold backup of all moobot instances; Meaning data is dumped into txt files and then compressed to save storage, often 80% less.
+### compresslogs.sh
+MooBot automatically compresses logs on start, but this is if you need to manually compress logs.
+### copyFile.sh
+I have 20 different instances, so this makes it easy to copy new code to all 20 at once.
+### rmFile.sh
+Remove a file from all instances.
+### updateAll.sh
+This file updates packages for all instances.
+### vacuum.js
+Vacuum all databases
+
+## Config Options
+### ip
+Server ip
+### port
+Server port
+### version
+Server version
+### prefix
+Command prefix (!)
+### cracked
+Enable if server is cracked to not use uuids
+### cracked_login
+Login for cracked server
+### discordprefix
+Discord command prefix
+### chatchannels
+Array of all chat channels, make sure you also fill guilds
+### guilds
+Array of all guilds, make sure both chatchannels and guilds are in the same index [0,1] etc
+### moreprefixes
+If you want to give players more prefix options
+### commandchannels
+Not generally needed as users can run commands in chat channels.
+### disabledcommands
+Disable any commands you don't want players to be able to use
+### ownerid
+Specify owner id for access to some special commands.
+### DisableAFK
+Disable the default anti-afk system
+### EnableMorePrefixes
+Enable more prefixes from moreprefixes
+### messageinterval
+How often to make announcements from messages.json
+### cooldowntime
+Command cooldown per player
+### GlobalCooldown
+Enable a global cooldown, not recommended since you can queue up messages instead
+### GlobalCooldownTime
+How long to wait in between commands from all players
+### whispercooldowntime
+Cooldown time for whispers
+### RemoveYellowJoinMessages
+Remove the default join messages
+### WalkForwardOnJoin
+Walk forward to bypass antispam
+### WalkConstantly
+Constantly walk in a circle - not recommended as anticheats don't like it
+### DeathConstantly
+Constantly kill your player, may help bypass antiafks
+### DeathTime
+How often to kill your player
+### DeathCommand
+Death command /kill
+### DeathOnJoin
+May help get you unstuck
+### CharacterLimit
+Max characters that can be sent in a message, any more will get cut off
+### DefaultMineflayerChatRegex
+Use the default regex system for mineflayer
+### newversionchatfix
+Experimental
+### purityvanilla
+Experimental
+### AlternativeChatRegexSystem
+Useful for servers with janky chat plugins that don't use the typical format.
+### CustomWhisperRegex
+Custom whisper regex
+### HideErrors
+Hide Mineflayer errors
+### LeaveOnMessage
+Automatically restart the bot when it finds a message in chat
+### LoginCommandEnabled
+Whether to enable a command upon login
+### LoginCommand
+Specified command to run upon login
+### LoginCommand2
+Another command if needed
+### LoginCommandSeconds
+How long to wait before sending login command
+### PingerDisabled
+Disable the server pinger, not recommended as the bot will constantly be hammering mojang auth
+### PingerTime
+How often to ping server if its down
+### MaxPlayerLimit
+Useful if server is at full capacity with no queue and you need to bruteforce your way in
+### PingerMaxPlayers
+Maximum players before bot will not connect
+### MinPlayerLimitDisabled
+Whether to allow the bot to join no matter how few players are online
+### MinPlayerLimit
+Don't allow the bot to join if there's no one online, will automatically ping and join once it detects someone.
+### whisperOnly
+Whether the bot will only whisper command responses, useful to avoid getting muted.
+### whisperCommmand
+Command used for whispering, default /w. If your server uses a different command, specify here.
+### tpaAcceptMsg
+Message to send when receiving a tpa request to accept.
+### TriggerMessage
+Enable a message that gets triggered from a regex
+### TriggerCommand
+Command ran after recieving a specific message.
+### EnableChatReporting
+Enable chat reporting, note you may be reported. Recommend to only use the bot on servers that disable it.
+### DisableMessageQueuing
+Not recommended - Instead of queueing messages, the bot will send them all at once
+### MessageQueueTime
+How long in between messages queued.
+### MaxMessagesInQueue
+How many messages can be queued up
+### DiscordQueueDisabled
+Not recommended. Whether to disable the discord message grouping queue.
+### DiscordQueueTime
+How often in between discord embeds, which group up to 10 messages each.
+### BlockedPhrases
+Specific phrases to block
+### UseNicknames
+Whether to automatically check players for nicknames if their name doesn't show up in player list.
+### FuckedChat
+Experimental
+### MailboxLimit
+Max messages per mailbox
+### AuthorMailboxLimit
+How many messages can be sent to one player from someone
+### OppositeDeathMessages
+Whether to reverse death messages based on server.
+### AntiSpamBypass
+Automatically append random string to the end if message isn't sent after 2 seconds
+### UUIDForMissingPlayers
+Check Mojang api for uuid if they can't be found in the player list
+### DisableHeartbeatCheck
+Disable checking to make sure the bot is still on the server and not in limbo
+### 2b2t
+2b2t options
+### regex
+Regex strings. tpa1, tpa2, cracked_login_pattern, chat, whisper, leavemessage, triggermessage
