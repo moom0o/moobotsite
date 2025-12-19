@@ -242,6 +242,33 @@
             All players have their own mailbox and other players are able to send them messages while they are offline so they can
             recieve it once they go back online. The author will also receive an offline message back letting them know the message was received.
 
+            <h2>Engineering Challenges</h2>
+            <h3>2025 - Anti-anti spam</h3>
+            My messages were constantly getting blocked for being too similar so I added some code to check if a message was sent by the server after 2 seconds, and if it wasn't, the message is automatically resent with extra characters at the end.
+            <h3>2025 - UUID Caching</h3>
+            I wanted to avoid hammering the Mojang API, so I added a UUID caching system. Usernames are locked for 37 days following a name change, so I set my limit to 35 days. UUIDs are stale after 35 days and will automatically be regrabbed upon request. This resulted in much fewer api requests as I was essentially the API.
+            <h3>2025 - Discord Queuer/Grouper</h3>
+            Same concept of the message queuer but for discord. I added the bot to a server with nearly 30K players all chatting at the same time and there was around 10 messages every second. The discord rate limit is 4/s with 10 embeds per group. So I created the grouper and queuer which brought my limit from 4 msgs/s up to 40 msgs/s
+            <h3>2024 - Message Queuer</h3>
+            Originally the bot was just sending out messages whenever players sent commands, but sometimes multiple players want to run commands at once, so this feature automatically queues up messages so the bot is never limited by the antispam.
+            <h3>2024 - Server Pinger</h3>
+            I wanted to avoid hammering the Mojang Auth API which logged in my account everytime I tried to connect to a server. Instead of logging in, I just added a pinger which detects exactly when a server comes online and if theres more than 0 players, so I can instantly join.
+            <h2>Migration History</h2>
+            All migration scripts have been archived and can be found in /migrationscripts
+            <h3>2025 - 2b2t.vc</h3>
+            I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored.
+            <h3>2025 - Removing spam</h3>
+            FTS-5 is essentially a copy of the messages table and takes up a ton of space. I realized there's a lot of useless spam on these servers and added a command to delete all rows containing certain phrases like discord links. This cut the database size in half.
+            <h3>2025 - FTS-5</h3>
+            I wanted to add a !clout command which shows how many times a phrase has been said in chat, normally this SQL query takes 10+ seconds to run as it has to go through millions of messages, but I added FTS-5 support which makes it incredibly efficient to search through text.
+            <h3>2025 - Parsing Logs</h3>
+            I had some missing data that was never saved which I was able to grab from the logs I kept going back to 2021. I was able to add new commands (like !joins to show how many times a player joined) and backfill the data from the logs. I also saved all death messages going back to 2021 so I could add commands like !lastdeath. I was also able to fill in missing data caused by a bug years ago that didn't save join dates for a few months.
+            <h3>2025 - Message Migration</h3>
+            For my messages table I was using an array of messages converted into a string for each player which wasn't ideal. I converted everything into per row and later added FTS-5 support to make searches instantaneous.
+            <h3>2021 - Massive JSON to SQLite Migration</h3>
+            Originally, the bot was using JSON files saved for each individual player. This is a terrible way of storing data with files randomly corrupting, and I ended up reaching the Linux file limit. Once that happened I immediately got to work and started migrating everything to an SQLite database which is much more efficient and allows for commands that would never be possible with a bunch of JSON files.
+            <h3>2019 - JSON Reformatting</h3>
+            Back when I first created the bot, one of the very first migrations I had to do was converting the format of the files.
 
             </body>
             <h2>Contribute</h2>
@@ -250,6 +277,7 @@
     </div>
 
 </div>
+
 
 
 
