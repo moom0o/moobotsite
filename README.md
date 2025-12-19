@@ -2,9 +2,6 @@
 
 A utility bot for anarchy minecraft servers with 5000 lines of code. Saving player data for more than 1 million
 minecraft players.
-
-<img width="1448" height="861" alt="image" src="https://github.com/user-attachments/assets/c68ba6cb-a5f7-493b-8ad4-470ba1879ad8" />
-
 - [Key Features](#Features)
 - [User Commands](#commands)
 - [Engineering Challenges](#engineering-challenges)
@@ -13,6 +10,9 @@ minecraft players.
 - [Terminal Commands](#terminal-commands)
 - [Scripts](#scripts)
 - [Configuration](#config-options)
+
+
+<img width="1448" height="861" alt="image" src="https://github.com/user-attachments/assets/c68ba6cb-a5f7-493b-8ad4-470ba1879ad8" />
 
 ## Features
 
