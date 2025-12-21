@@ -179,6 +179,7 @@ Back when I first created the bot, one of the very first migrations I had to do 
 <h3> !runtime / !uptime</h3> Uptime of bot
 
 <h1>Web API Commands</h1>
+<h3> <new style="color:red">NEW</new> !grok / !elon / !xai</h3> Use !grok reset to reset - Ask Grok a prompt and respond with the bot
 <h3> <new style="color:red">NEW</new> !gemini / !google</h3> Use !gemini reset to reset - Ask Google Gemini a prompt and respond with the bot!
 <h3> <new style="color:red">NEW</new> !pirate QUERY</h3> Search the pirate bay!
 <h3> <new style="color:red">NEW</new> !tor QUERY</h3> Search the dark web! (Uses the ahmia search engine) What could possibly go wrong...
