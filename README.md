@@ -1,7 +1,9 @@
 # moobot
 
-A utility bot for anarchy minecraft servers with 5000 lines of code. Saving player data for more than 1 million
-minecraft players.
+A utility bot for anarchy minecraft servers with more than 100 commands, a database size of 50GB saving player data for more than 1.5 million Minecraft players and over 100 million messages.
+
+Closed-source. Source code available for review upon request.
+
 - [Key Features](#Features)
 - [User Commands](#commands)
 - [Engineering Challenges](#engineering-challenges)
