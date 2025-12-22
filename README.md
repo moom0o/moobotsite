@@ -10,8 +10,46 @@ Closed-source. Source code available for review upon request.
 - [User Commands](#moobot-commands-main-commands-)
 - [Admin Commands/Tools/Configuration](#admin)
 
+```mermaid
+graph TD
+    %% --- Section 1: UUID Caching ---
+    Bot[UUID Parsing] -->|1. Resolve User| Check{In Cache?}
+    
+    Check -->|Yes| DB[(SQLite DB)]
+    Check -->|No / Stale| API[Mojang API]
+    
+    API -->|2. Backfill Data| DB
+    DB -->|3. Return UUID| Bot
 
-<img width="1448" height="861" alt="image" src="i7.png" />
+    %% --- Section 2: Message Grouping ---
+    subgraph "Message Grouping/Queuing"
+    Msg1[Chat 1] & Msg2[Chat 2] & Msg3[Chat 3] --> Aggregator[Grouper]
+    end
+    
+    Aggregator -->|Single Embed Count <= 10| Batch[Add to queue]
+    Batch -->|Wait 1000ms/embed| Discord[Discord API]
+
+    %% --- Section 3: Smart Server Pinger ---
+    subgraph "Connection Logic (Smart Pinger)"
+    Disconnected([Disconnected]) --> Timer[/Wait 3s/]
+    Timer --> Ping[Ping Packet]
+    
+    Ping --> Status{Online & Players > 0?}
+    
+    Status --No--> Timer
+    Status --Yes--> Join[Initiate Join]
+    end
+```
+
+**Benchmark Results (20M Rows Active Dataset):**
+* **Legacy Search (`LIKE`):** 5.599s (Thread Blocking)
+* **Optimized Search (`FTS5`):** 0.010s (Instant)
+
+ ```text
+ Query Latency Comparison:
+ Legacy (LIKE): |==================================================| 5600ms
+ FTS5 (Match):  |                                                  | 10ms
+ ```
 
 # Engineering Challenges
 ### 2025 - Anti-anti spam
@@ -29,10 +67,34 @@ I wanted to avoid hammering the Mojang Auth API which logged in my account every
 All migration scripts have been archived and can be found in /migrationscripts
 ### 2025 - 2b2t.vc
 I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored. I also added a feature to automatically cut new players (that haven't been checked yet) to the front of the queue so data was as accurate as possible without having to wait 2 months for all data to be scraped.
+```mermaid
+graph LR
+    subgraph "Historical Data"
+    New[Recently Joined Players] -->|High Priority| PQueue[("Scrape Queue")]
+    Old[Inactive Players] -->|Low Priority| PQueue
+    end
+
+    PQueue -->|Pop Next Item| Worker[Scraper Worker]
+    Worker -->|Request| Site[2b2t.vc]
+    
+    Site -->|Response| Check{Status Code?}
+    
+    %% Success Path
+    Check -->|200 OK| Success[Process Data]
+    Success -->|Save| DB[(Database)]
+    Success -->|"Decrease Delay (-150ms)"| AdjustDelay[Throttler Config]
+    
+    %% Failure Path
+    Check -->|429 Rate Limit| Fail[Backoff]
+    Fail -->|"Increase Delay (+500ms)"| AdjustDelay
+    Fail -->|Re-queue Item| PQueue
+    
+    AdjustDelay -.->|Apply Cooldown| Worker
+```
 ### 2025 - Removing spam
 FTS-5 is essentially a copy of the messages table and takes up a ton of space. I realized there's a lot of useless spam on these servers and added a command to delete all rows containing certain phrases like discord links. This cut the database size in half.
 ### 2025 - FTS-5
-I wanted to add a !clout command which shows how many times a phrase has been said in chat, normally this SQL query takes 10+ seconds to run as it has to go through millions of messages, but I added FTS-5 support which makes it incredibly efficient to search through text.
+I wanted to add a !clout command which shows how many times a phrase has been said in chat, normally this SQL query takes 10+ seconds to run as it has to go through millions of messages, but I added FTS-5 support which makes it incredibly efficient to search through text. With 20 million rows, the legacy LIKE operator took **5600ms**, while FTS5 match took only **10ms**.
 ### 2025 - Parsing Logs
 I had some missing data that was never saved which I was able to grab from the logs I kept going back to 2021. I was able to add new commands (like !joins to show how many times a player joined) and backfill the data from the logs. I also saved all death messages going back to 2021 so I could add commands like !lastdeath. I was also able to fill in missing data caused by a bug years ago that didn't save join dates for a few months.
 ### 2025 - Message Migration
