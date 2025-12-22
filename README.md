@@ -7,7 +7,7 @@ Closed-source. Source code available for review upon request.
 - [Engineering Challenges](#engineering-challenges)
 - [Migration History](#migration-history)
 - [Key Features](#Features)
-- [User Commands](#moobot-commands)
+- [User Commands](#moobot-commands-main-commands-)
 - [Admin Commands/Tools/Configuration](#admin)
 
 
