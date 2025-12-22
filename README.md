@@ -4,10 +4,10 @@ A utility bot for anarchy minecraft servers with more than 100 commands, a datab
 
 Closed-source. Source code available for review upon request.
 
-- [Key Features](#Features)
-- [User Commands](#commands)
 - [Engineering Challenges](#engineering-challenges)
 - [Migration History](#migration-history)
+- [Key Features](#Features)
+- [User Commands](#commands)
 - [Discord Admin Commands](#discord-admin-commands)
 - [Terminal Commands](#terminal-commands)
 - [Scripts](#scripts)
@@ -15,6 +15,35 @@ Closed-source. Source code available for review upon request.
 
 
 <img width="1448" height="861" alt="image" src="https://github.com/user-attachments/assets/c68ba6cb-a5f7-493b-8ad4-470ba1879ad8" />
+
+## Engineering Challenges
+### 2025 - Anti-anti spam
+My messages were constantly getting blocked for being too similar so I added some code to check if a message was sent by the server after 2 seconds, and if it wasn't, the message is automatically resent with extra characters at the end.
+### 2025 - UUID Caching
+I wanted to avoid hammering the Mojang API, so I added a UUID caching system. Usernames are locked for 37 days following a name change, so I set my limit to 35 days. UUIDs are stale after 35 days and will automatically be regrabbed upon request. This resulted in much fewer api requests as I was essentially the API.
+### 2025 - Discord Queuer/Grouper
+Same concept of the message queuer but for discord. I added the bot to a server with nearly 30K players all chatting at the same time and there was around 10 messages every second. The discord rate limit is 4/s with 10 embeds per group. So I created the grouper and queuer which brought my limit from 4 msgs/s up to 40 msgs/s
+### 2024 - Message Queuer
+Originally the bot was just sending out messages whenever players sent commands, but sometimes multiple players want to run commands at once, so this feature automatically queues up messages so the bot is never limited by the antispam.
+### 2024 - Server Pinger
+I wanted to avoid hammering the Mojang Auth API which logged in my account everytime I tried to connect to a server. Instead of logging in, I just added a pinger which detects exactly when a server comes online and if theres more than 0 players, so I can instantly join.
+
+## Migration History
+All migration scripts have been archived and can be found in /migrationscripts
+### 2025 - 2b2t.vc
+I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored. I also added a feature to automatically cut new players (that haven't been checked yet) to the front of the queue so data was as accurate as possible without having to wait 2 months for all data to be scraped.
+### 2025 - Removing spam
+FTS-5 is essentially a copy of the messages table and takes up a ton of space. I realized there's a lot of useless spam on these servers and added a command to delete all rows containing certain phrases like discord links. This cut the database size in half.
+### 2025 - FTS-5
+I wanted to add a !clout command which shows how many times a phrase has been said in chat, normally this SQL query takes 10+ seconds to run as it has to go through millions of messages, but I added FTS-5 support which makes it incredibly efficient to search through text.
+### 2025 - Parsing Logs
+I had some missing data that was never saved which I was able to grab from the logs I kept going back to 2021. I was able to add new commands (like !joins to show how many times a player joined) and backfill the data from the logs. I also saved all death messages going back to 2021 so I could add commands like !lastdeath. I was also able to fill in missing data caused by a bug years ago that didn't save join dates for a few months.
+### 2025 - Message Migration
+For my messages table I was using an array of messages converted into a string for each player which wasn't ideal. I converted everything into per row and later added FTS-5 support to make searches instantaneous.
+### 2021 - Massive JSON to SQLite Migration
+Originally, the bot was using JSON files saved for each individual player. This is a terrible way of storing data with files randomly corrupting, and I ended up reaching the Linux file limit. Once that happened I immediately got to work and started migrating everything to an SQLite database which is much more efficient and allows for commands that would never be possible with a bunch of JSON files.
+### 2019 - JSON Reformatting
+Back when I first created the bot, one of the very first migrations I had to do was converting the format of the files.
 
 ## Features
 
@@ -86,35 +115,6 @@ locked for 37 days before they can be taken)
 
 All players have their own mailbox and other players are able to send them messages while they are offline so they can
 recieve it once they go back online.
-
-
-## Engineering Challenges
-### 2025 - Anti-anti spam
-My messages were constantly getting blocked for being too similar so I added some code to check if a message was sent by the server after 2 seconds, and if it wasn't, the message is automatically resent with extra characters at the end.
-### 2025 - UUID Caching
-I wanted to avoid hammering the Mojang API, so I added a UUID caching system. Usernames are locked for 37 days following a name change, so I set my limit to 35 days. UUIDs are stale after 35 days and will automatically be regrabbed upon request. This resulted in much fewer api requests as I was essentially the API.
-### 2025 - Discord Queuer/Grouper
-Same concept of the message queuer but for discord. I added the bot to a server with nearly 30K players all chatting at the same time and there was around 10 messages every second. The discord rate limit is 4/s with 10 embeds per group. So I created the grouper and queuer which brought my limit from 4 msgs/s up to 40 msgs/s
-### 2024 - Message Queuer
-Originally the bot was just sending out messages whenever players sent commands, but sometimes multiple players want to run commands at once, so this feature automatically queues up messages so the bot is never limited by the antispam.
-### 2024 - Server Pinger
-I wanted to avoid hammering the Mojang Auth API which logged in my account everytime I tried to connect to a server. Instead of logging in, I just added a pinger which detects exactly when a server comes online and if theres more than 0 players, so I can instantly join.
-## Migration History
-All migration scripts have been archived and can be found in /migrationscripts
-### 2025 - 2b2t.vc
-I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored. I also added a feature to automatically cut new players (that haven't been checked yet) to the front of the queue so data was as accurate as possible without having to wait 2 months for all data to be scraped.
-### 2025 - Removing spam
-FTS-5 is essentially a copy of the messages table and takes up a ton of space. I realized there's a lot of useless spam on these servers and added a command to delete all rows containing certain phrases like discord links. This cut the database size in half.
-### 2025 - FTS-5
-I wanted to add a !clout command which shows how many times a phrase has been said in chat, normally this SQL query takes 10+ seconds to run as it has to go through millions of messages, but I added FTS-5 support which makes it incredibly efficient to search through text.
-### 2025 - Parsing Logs
-I had some missing data that was never saved which I was able to grab from the logs I kept going back to 2021. I was able to add new commands (like !joins to show how many times a player joined) and backfill the data from the logs. I also saved all death messages going back to 2021 so I could add commands like !lastdeath. I was also able to fill in missing data caused by a bug years ago that didn't save join dates for a few months.
-### 2025 - Message Migration
-For my messages table I was using an array of messages converted into a string for each player which wasn't ideal. I converted everything into per row and later added FTS-5 support to make searches instantaneous.
-### 2021 - Massive JSON to SQLite Migration
-Originally, the bot was using JSON files saved for each individual player. This is a terrible way of storing data with files randomly corrupting, and I ended up reaching the Linux file limit. Once that happened I immediately got to work and started migrating everything to an SQLite database which is much more efficient and allows for commands that would never be possible with a bunch of JSON files.
-### 2019 - JSON Reformatting
-Back when I first created the bot, one of the very first migrations I had to do was converting the format of the files.
 
 ## Commands
 <p>
@@ -200,11 +200,10 @@ Back when I first created the bot, one of the very first migrations I had to do 
 <h3> !ip</h3> find location and isp of an ip or domain.
 
 <h1>Fun commands</h1>
-<h3> <new style="color:red">NEW</new> !hitman / !eliminate / !target</h3> Deploy a hitman to someone's location
+<h3> <new style="color:red">NEW</new> !hitman / !eliminate / !target</h3> Deploy a fake hitman to someone's location
 <h3> <new style="color:red">NEW</new> !blackjack</h3> Play a game of blackjack! Use !blackjack hit/stand
 <h3> <new style="color:red">NEW</new> !roulette</h3> Spin a roulette wheel!
 <h3> <new style="color:red">NEW</new> !nuke LOCATION</h3> Send a nuke to your specified location!
-<!-- <h3> <new style="color:red">NEW</new> !gas / !biden / !brandon</h3> Get current gas price in a specific town/state. UNITED STATES ONLY! <a href="/bonus.mp4">bonus video</a> -->
 <h3> !curse</h3> Curse a player!
 <h3> !ban</h3> Ban a player!
 <h3> !kick</h3> Kick a player!
@@ -215,17 +214,15 @@ Back when I first created the bot, one of the very first migrations I had to do 
 <h3> !yes</h3> YES
 <h3> !dupe</h3> dupe an item!
 <h3> !locate</h3> get someones coords! 100% working 2020
-<h3> !dox</h3> find someones "ip"
 <h3> !y/n</h3> Yes or no
 <h3> !dice</h3> Roll a die
 <h3> !leak</h3> Leak coords
 <h3> !gm / !gamemode</h3> Change your gamemode
 <h3> !infect</h3> infect someone.
-<h3> !askgod / !askallah / !askrusher</h3> ask
+<h3> !ask</h3> ask
 <h3> !give</h3> give someone something
 <h3> !teleport</h3> teleport!
 <h3> !back</h3> go back
-<h3> !suicide</h3> kill yourself
 <h3> !op</h3> Op yourself or someone else
 <h3> !tpa</h3> Request teleport to someone
 <h3> !tphere / !tpahere</h3> Request someone to teleport to you
@@ -394,8 +391,6 @@ How often in between discord embeds, which group up to 10 messages each.
 Specific phrases to block
 ### UseNicknames
 Whether to automatically check players for nicknames if their name doesn't show up in player list.
-### FuckedChat
-Experimental
 ### MailboxLimit
 Max messages per mailbox
 ### AuthorMailboxLimit
