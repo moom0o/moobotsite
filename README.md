@@ -7,16 +7,13 @@ Closed-source. Source code available for review upon request.
 - [Engineering Challenges](#engineering-challenges)
 - [Migration History](#migration-history)
 - [Key Features](#Features)
-- [User Commands](#commands)
-- [Discord Admin Commands](#discord-admin-commands)
-- [Terminal Commands](#terminal-commands)
-- [Scripts](#scripts)
-- [Configuration](#config-options)
+- [User Commands](#moobot)
+- [Admin Commands/Tools/Configuration](#admin)
 
 
-<img width="1448" height="861" alt="image" src="https://github.com/user-attachments/assets/c68ba6cb-a5f7-493b-8ad4-470ba1879ad8" />
+<img width="1448" height="861" alt="image" src="i7.png" />
 
-## Engineering Challenges
+# Engineering Challenges
 ### 2025 - Anti-anti spam
 My messages were constantly getting blocked for being too similar so I added some code to check if a message was sent by the server after 2 seconds, and if it wasn't, the message is automatically resent with extra characters at the end.
 ### 2025 - UUID Caching
@@ -28,7 +25,7 @@ Originally the bot was just sending out messages whenever players sent commands,
 ### 2024 - Server Pinger
 I wanted to avoid hammering the Mojang Auth API which logged in my account everytime I tried to connect to a server. Instead of logging in, I just added a pinger which detects exactly when a server comes online and if theres more than 0 players, so I can instantly join.
 
-## Migration History
+# Migration History
 All migration scripts have been archived and can be found in /migrationscripts
 ### 2025 - 2b2t.vc
 I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored. I also added a feature to automatically cut new players (that haven't been checked yet) to the front of the queue so data was as accurate as possible without having to wait 2 months for all data to be scraped.
@@ -45,19 +42,19 @@ Originally, the bot was using JSON files saved for each individual player. This 
 ### 2019 - JSON Reformatting
 Back when I first created the bot, one of the very first migrations I had to do was converting the format of the files.
 
-## Features
+# Features
 
 ### Discord chat bridge
 
 The bot has full support in discord for cross chatting and running commands!
 
-<img width="524" height="821" alt="image" src="https://github.com/user-attachments/assets/c670510e-f472-419b-95e6-113ac35935b0" />
+<img width="524" height="821" alt="image" src="i1.png" />
 
 ### Advanced player database system
 
 The bot uses sqlite3 to store all kinds of player statistics and messages.
 
-<img width="674" height="569" alt="image" src="https://github.com/user-attachments/assets/9d103fb0-e76e-4f9d-a5cf-f8e259813030" />
+<img width="674" height="569" alt="image" src="i2.png" />
 
 ### Message Queuing
 
@@ -67,13 +64,13 @@ The bot will queue up messages so all messages can go through and the bot won't 
 
 The bot automatically groups up messages (up to 10 embeds per message) to avoid getting rate limited by discord with lots of chat messages
 
-<img width="940" height="526" alt="image" src="https://i.moomoo.me/d395kX.gif?key=VcmS8gFNG1" />
+<img width="940" height="526" alt="image" src="i3.gif" />
 
 ### Anti anti spam
 
 The bot will automatically retry messages that fail to send after a few seconds.
 
-<img width="964" height="186" alt="image" src="https://github.com/user-attachments/assets/d83df77c-39c2-4650-80cd-52a3c3a8403f" />
+<img width="698" height="265" alt="image" src="i4.png" />
 
 ### Death messages
 
@@ -89,14 +86,14 @@ The bot includes an advanced configurable regex system for custom chat regexes i
 The bot will automatically ping the server every 3 secs before joining to make sure it's online, has more than 0 players
 online in case the main server is down, and avoids constant logins.
 
-<img width="412" height="345" alt="image" src="https://github.com/user-attachments/assets/630d9ce0-9572-4c5f-9da4-ef4514a24cc9" />
+<img width="412" height="345" alt="image" src="i5.png" />
 
 ### Full message logging
 
 Never miss a message with a full logging system. The bot will automatically log messages and join/leave msgs and
 automatically compress log files to save space.
 
-<img width="1039" height="709" alt="image" src="https://github.com/user-attachments/assets/203e7907-1250-4b7a-ba35-8ce7171a0127" />
+<img width="1039" height="709" alt="image" src="i6.png" />
 
 ### Automatic TPA
 
@@ -116,12 +113,11 @@ locked for 37 days before they can be taken)
 All players have their own mailbox and other players are able to send them messages while they are offline so they can
 recieve it once they go back online.
 
-## Commands
 <p>
 <h1>MooBot commands (Main commands) </h1>
 <h3>Note: commands have a 5 second cooldown per user</h3>
 <h3>!help - Get a help menu</h3>
-<h1>Database Player Statistics</h1>
+<details><summary><h2>Database Player Statistics</h2></summary>
 <h3> <new style="color:red">NEW</new> !bedrock</h3> Find out how many bedrock players have joined.
 <h3> <new style="color:red">NEW</new> !joins or !quits</h3> Check how many times someone has joined or left (extracted from logs going back to 2021)
 
@@ -152,21 +148,24 @@ recieve it once they go back online.
 <h3> !iam</h3> Tell the bot who you are
 <h3> !whois</h3> See who people are
 <h3> !uuid</h3> Find a minecraft player's uuid (if server is cracked, will only show name)
+</details>
 
-<h1>Online Player Statistics</h1>
+<details><summary><h2>Online Player Statistics</h2></summary>
 <h3> <new style="color:red">NEW</new> !players - ONLY WORKS ON DISCORD</h3> Total number of players and a list of current players online. In game, it shows the total amount of players that the bot has saved data for.
 <h3> <new style="color:red">NEW</new> !bestjitter or !bestj [MINUTES]</h3> Get players with lowest jitter.
 <h3> <new style="color:red">NEW</new> !worstjitter or !wj [MINUTES]</h3> Get players with highest jitter.
 <h3> !ping</h3> Get ping of yourself or someone else. Now shows jitter!
 <h3> !bestping or !bp</h3> Get player with lowest ping.
 <h3> !worstping or !wp</h3> Get player with highest ping.
+</details>
 
-<h1>Offline Messaging System</h1>
+<details><summary><h2>Offline Messaging System</h2></summary>
 <h3> <new style="color:red">UPDATED!</new> !offlinemsg / !om / !offlinemessage / !omsg</h3> Save a message for someone and moobot will send them the message once they are online. NOW SUPPORTS UP TO 6 MESSAGES/2 PER AUTHOR!
 <h3> !ignore</h3> prevent someone from !offlinemsging you.
 <h3> !unignore</h3> allow someone to !offlinemsg you.
+</details>
 
-<h1>InGame Bot Commands</h1>
+<details><summary><h2>InGame Bot Commands</h2></summary>
 <h3> <new style="color:red">NEW</new> !mount</h3> Mount any boat or minecart within 5 blocks of the bot. Warning: Anyone can find the coords of the bot, don't bring it to your base!!!
 <h3> <new style="color:red">NEW</new> !dismount / !unmount</h3> Dismount from the boat or minecart.
 <h3> <new style="color:red">UPDATED!</new> !time</h3> Time in ticks, and NOW tells you how long until you can sleep.
@@ -179,16 +178,15 @@ recieve it once they go back online.
 <h3> !discord</h3> Get discord invite for chat bridge
 <h3> !health</h3> Health and food level of bot
 <h3> !runtime / !uptime</h3> Uptime of bot
+</details>
 
-<h1>Web API Commands</h1>
+<details><summary><h2>Web API Commands</h2></summary>
 <h3> <new style="color:red">NEW</new> !grok / !elon / !xai</h3> Use !grok reset to reset - Ask Grok a prompt and respond with the bot
 <h3> <new style="color:red">NEW</new> !gemini / !google</h3> Use !gemini reset to reset - Ask Google Gemini a prompt and respond with the bot!
-<h3> <new style="color:red">NEW</new> !pirate QUERY</h3> Search the pirate bay!
-<h3> <new style="color:red">NEW</new> !tor QUERY</h3> Search the dark web! (Uses the ahmia search engine) What could possibly go wrong...
 <h3> <new style="color:red">UPDATED!</new> !chatgpt / !gpt / !ai</h3> Now supports message history! Use !gpt reset to reset - Ask chatgpt a prompt and respond with the bot
-<h3> <new style="color:red">UPDATED!</new> !deepseek / !china / !xi</h3> Now supports message history! Use !deepseek reset to reset - Ask deepseek (chinese gpt) a prompt and respond with the bot
+<h3> <new style="color:red">UPDATED!</new> !deepseek</h3> Now supports message history! Use !deepseek reset to reset - Ask deepseek (chinese gpt) a prompt and respond with the bot
 <h3> <new style="color:red">NEW</new> !stock [SYMBOL] [OPTIONAL DATE&ORTIME]</h3> Get current or historical price of stock with flexible date and time option.
-<h3> <new style="color:red">NEW</new> !dadjoke / !joke</h3> Get a shitty dad joke.
+<h3> <new style="color:red">NEW</new> !dadjoke / !joke</h3> Get a dad joke.
 <h3> !wolframalpha/!wa/!math [QUERY]</h3> Get query from <a href="https://www.wolframalpha.com">WolframAlpha</a>
 <h3> !linkpreview/!link/!www [URL]</h3> Get title of any website
 <h3> !down</h3> Check if a website is down
@@ -198,12 +196,11 @@ recieve it once they go back online.
 <!-- <h3> !verse or !bible</h3> Get a random bible verse or add a verse at the end of the command! -->
 <h3> !online EXAMPLE "!online 2b2t.org"</h3> Check how many players are online on a minecraft server.
 <h3> !ip</h3> find location and isp of an ip or domain.
+</details>
 
-<h1>Fun commands</h1>
-<h3> <new style="color:red">NEW</new> !hitman / !eliminate / !target</h3> Deploy a fake hitman to someone's location
+<details><summary><h2>Fun commands</h2></summary>
 <h3> <new style="color:red">NEW</new> !blackjack</h3> Play a game of blackjack! Use !blackjack hit/stand
 <h3> <new style="color:red">NEW</new> !roulette</h3> Spin a roulette wheel!
-<h3> <new style="color:red">NEW</new> !nuke LOCATION</h3> Send a nuke to your specified location!
 <h3> !curse</h3> Curse a player!
 <h3> !ban</h3> Ban a player!
 <h3> !kick</h3> Kick a player!
@@ -233,17 +230,22 @@ recieve it once they go back online.
 <h3> !execute</h3> start a vote to execute someone, use /kill yes or /kill no to vote.
 <h3> !bless</h3> bless someone. You are a good person.
 <h3> !kit</h3> recieve a kit!
+</details>
 
+<h1>Admin</h1>
 
-## Discord Admin Commands
+<details><summary><h2>Discord Admin Commands</h2></summary>
+
 ### !ignorephrase
 Permanently ignore a phrase in chat, saved to blockedphrases.json
 ### !ignoredeath
 Permanently ignore a players death messages in chat, saved to blockeddeaths.json
 ### !restart
 Run process.exit and restart bot
+</details>
 
-## Terminal commands
+<details><summary><h2>Terminal Commands</h2></summary>
+
 ### /hide
 Hide death messages and join/leave messages
 ### /ignorephrase
@@ -256,9 +258,11 @@ Add a message to the queue, so you aren't hitting antispam limits.
 Enable client side connection messages if server doesn't have them.
 ### /delete
 Delete all messages associated with certain phrases. For example deleting discord advertisements can save tons of storage.
+</details>
 
+<details>
+<summary><h2>Scripts</h2></summary>
 
-## Scripts
 ### backup.sh
 Run a backup of all moobot instances, it vacuums into a new file and the rsyncs it to another server.
 ### backupcold.sh
@@ -273,8 +277,11 @@ Remove a file from all instances.
 This file updates packages for all instances.
 ### vacuum.js
 Vacuum all databases
+</details>
 
-## Config Options
+<details>
+<summary><h2>Config Options</h2></summary>
+
 ### ip
 Server ip
 ### port
@@ -407,3 +414,4 @@ Disable checking to make sure the bot is still on the server and not in limbo
 2b2t options
 ### regex
 Regex strings. tpa1, tpa2, cracked_login_pattern, chat, whisper, leavemessage, triggermessage
+</details>
