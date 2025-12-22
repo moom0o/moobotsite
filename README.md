@@ -100,7 +100,7 @@ I wanted to avoid hammering the Mojang Auth API which logged in my account every
 ## Migration History
 All migration scripts have been archived and can be found in /migrationscripts
 ### 2025 - 2b2t.vc
-I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored.
+I was trying to scrape 2b2t.vc for historical playerdata to fill in the missing gaps, and had to deal with rate limits. Instead of a static 10 second cooldown, I added a feature that automatically adjusted the cooldown to get the max number of requests without getting errored. I also added a feature to automatically cut new players (that haven't been checked yet) to the front of the queue so data was as accurate as possible without having to wait 2 months for all data to be scraped.
 ### 2025 - Removing spam
 FTS-5 is essentially a copy of the messages table and takes up a ton of space. I realized there's a lot of useless spam on these servers and added a command to delete all rows containing certain phrases like discord links. This cut the database size in half.
 ### 2025 - FTS-5
@@ -195,6 +195,7 @@ Back when I first created the bot, one of the very first migrations I had to do 
 <!-- <h3> !reddit or !reddit (reddit name) (EXAMPLE: "!reddit 2b2t" or "!reddit r/2b2t")</h3> GET latest post from a subreddit (<works style="color:red">Most likely broken, 403 from reddit api.</works>) -->
 <!-- <h3> !verse or !bible</h3> Get a random bible verse or add a verse at the end of the command! -->
 <h3> !online EXAMPLE "!online 2b2t.org"</h3> Check how many players are online on a minecraft server.
+<h3> !ip</h3> find location and isp of an ip or domain.
 
 <h1>Fun commands</h1>
 <h3> <new style="color:red">NEW</new> !hitman / !eliminate / !target</h3> Deploy a hitman to someone's location
@@ -212,7 +213,6 @@ Back when I first created the bot, one of the very first migrations I had to do 
 <h3> !yes</h3> YES
 <h3> !dupe</h3> dupe an item!
 <h3> !locate</h3> get someones coords! 100% working 2020
-<h3> !ip</h3> find location and isp of an ip or domain.
 <h3> !dox</h3> find someones "ip"
 <h3> !y/n</h3> Yes or no
 <h3> !dice</h3> Roll a die
