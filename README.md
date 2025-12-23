@@ -1,4 +1,19 @@
 # moobot
+![NodeJS](https://img.shields.io/badge/Node.js-Runtime-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Discord.js](https://img.shields.io/badge/Discord.js-v13-5865F2?style=for-the-badge&logo=discord&logoColor=white)
+![Mineflayer](https://img.shields.io/badge/Mineflayer-Bot_Framework-green?style=for-the-badge&logo=minecraft&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+
+![MCPing](https://img.shields.io/badge/MCPing-Server_Status-blueviolet?style=for-the-badge&logo=npm&logoColor=white)
+![Mojang API](https://img.shields.io/badge/Mojang-REST_API-red?style=for-the-badge&logo=java&logoColor=white)
+![Unirest](https://img.shields.io/badge/Unirest-HTTP_Client-E34F26?style=for-the-badge&logo=npm&logoColor=white)
+![Cheerio](https://img.shields.io/badge/Cheerio-Web_Scraping-e88c1f?style=for-the-badge&logo=rss&logoColor=white)
+
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT_4-412991?style=for-the-badge&logo=openai&logoColor=white)
+![xAI Grok](https://img.shields.io/badge/xAI-Grok-000000?style=for-the-badge&logo=x&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google_GenAI-Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![DeepSeek](https://img.shields.io/badge/DeepSeek-LLM-blue?style=for-the-badge&logo=robot&logoColor=white)
+![Wolfram Alpha](https://img.shields.io/badge/Wolfram_Alpha-Math-DD1100?style=for-the-badge&logo=wolfram&logoColor=white)
 
 A utility bot for anarchy minecraft servers with more than 100 commands, a database size of 50GB saving player data for more than 1.5 million Minecraft players and over 100 million messages.
 
