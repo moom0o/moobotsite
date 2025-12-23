@@ -125,13 +125,13 @@ Back when I first created the bot, one of the very first migrations I had to do 
 
 The bot has full support in discord for cross chatting and running commands!
 
-<img width="524" height="821" alt="image" src="i1.png" />
+<img width="524" height="821" alt="image" src="imgs/i1.png" />
 
 ### Advanced player database system
 
 The bot uses sqlite3 to store all kinds of player statistics and messages.
 
-<img width="674" height="569" alt="image" src="i2.png" />
+<img width="674" height="569" alt="image" src="imgs/i2.png" />
 
 ### Message Queuing
 
@@ -141,13 +141,13 @@ The bot will queue up messages so all messages can go through and the bot won't 
 
 The bot automatically groups up messages (up to 10 embeds per message) to avoid getting rate limited by discord with lots of chat messages
 
-<img width="940" height="526" alt="image" src="i3.gif" />
+<img width="940" height="526" alt="image" src="imgs/i3.gif" />
 
 ### Anti anti spam
 
 The bot will automatically retry messages that fail to send after a few seconds.
 
-<img width="698" height="265" alt="image" src="i4.png" />
+<img width="698" height="265" alt="image" src="imgs/i4.png" />
 
 ### Death messages
 
@@ -163,14 +163,14 @@ The bot includes an advanced configurable regex system for custom chat regexes i
 The bot will automatically ping the server every 3 secs before joining to make sure it's online, has more than 0 players
 online in case the main server is down, and avoids constant logins.
 
-<img width="412" height="345" alt="image" src="i5.png" />
+<img width="412" height="345" alt="image" src="imgs/i5.png" />
 
 ### Full message logging
 
 Never miss a message with a full logging system. The bot will automatically log messages and join/leave msgs and
 automatically compress log files to save space.
 
-<img width="1039" height="709" alt="image" src="i6.png" />
+<img width="1039" height="709" alt="image" src="imgs/i6.png" />
 
 ### Automatic TPA
 
