@@ -15,7 +15,9 @@
 ![DeepSeek](https://img.shields.io/badge/DeepSeek-LLM-blue?style=for-the-badge&logo=robot&logoColor=white)
 ![Wolfram Alpha](https://img.shields.io/badge/Wolfram_Alpha-Math-DD1100?style=for-the-badge&logo=wolfram&logoColor=white)
 
-A utility bot for anarchy minecraft servers with more than 100 commands, a database size of 50GB saving player data for more than 1.5 million Minecraft players and over 100 million messages.
+A utility bot for anarchy minecraft servers with more than **100** commands, a database size of **50GB** saving player data for more than **1.5 million** Minecraft players and over **100 million** messages.
+
+I also **monetized** and sold **$20** usage rights to over **15** different server owners.
 
 Closed-source. Source code available for review upon request.
 
@@ -115,7 +117,7 @@ I had some missing data that was never saved which I was able to grab from the l
 ### 2025 - Message Migration
 For my messages table I was using an array of messages converted into a string for each player which wasn't ideal. I converted everything into per row and later added FTS-5 support to make searches instantaneous.
 ### 2021 - Massive JSON to SQLite Migration
-Originally, the bot was using JSON files saved for each individual player. This is a terrible way of storing data with files randomly corrupting, and I ended up reaching the Linux file limit. Once that happened I immediately got to work and started migrating everything to an SQLite database which is much more efficient and allows for commands that would never be possible with a bunch of JSON files.
+Originally, the bot was using JSON files saved for each individual player. This is a terrible way of storing data with files randomly corrupting, and I even ended up reaching the Linux INode limit. (df -i) Once that happened I immediately got to work and started migrating everything to an SQLite database which is much more efficient and allows for commands that would never be possible with a bunch of JSON files.
 ### 2019 - JSON Reformatting
 Back when I first created the bot, one of the very first migrations I had to do was converting the format of the files.
 
