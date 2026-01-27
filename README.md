@@ -230,6 +230,7 @@ recieve it once they go back online.
 </details>
 
 <details><summary><h2>Online Player Statistics</h2></summary>
+<h3> <new style="color:red">NEW</new> !prio / !slots - See how many priority slots are currently on 2b2t
 <h3> <new style="color:red">NEW</new> !players - ONLY WORKS ON DISCORD</h3> Total number of players and a list of current players online. In game, it shows the total amount of players that the bot has saved data for.
 <h3> <new style="color:red">NEW</new> !bestjitter or !bestj [MINUTES]</h3> Get players with lowest jitter.
 <h3> <new style="color:red">NEW</new> !worstjitter or !wj [MINUTES]</h3> Get players with highest jitter.
